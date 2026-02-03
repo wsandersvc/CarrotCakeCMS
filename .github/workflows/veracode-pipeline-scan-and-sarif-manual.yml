@@ -82,6 +82,7 @@ jobs:
       - run: |
           Get-ChildItem -Force -Recurse
         shell: powershell
+        if: always()
 
       - name: Convert pipeline scan output to SARIF format
         if: always()
