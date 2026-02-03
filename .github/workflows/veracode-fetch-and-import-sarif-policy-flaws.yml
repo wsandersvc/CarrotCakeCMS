@@ -6,7 +6,7 @@ on:
 jobs:
   fetch_policy_flaws_task:
     if: always()
-    uses: wsandersvc/actions/.github/workflows/veracode-fetch-and-import-sarif-policy-flaws.yml@main
+    uses: wsandersvco/actions/.github/workflows/veracode-fetch-and-import-sarif-policy-flaws.yml@main
     secrets: inherit
     with:
       application_name: GitHub Actions - CarrotCakeCMS
