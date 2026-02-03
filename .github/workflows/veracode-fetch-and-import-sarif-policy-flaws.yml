@@ -39,6 +39,12 @@ jobs:
     name: Import policy results to SARIF
 
     steps:
+      - name: Get scan results
+        uses: actions/download-artifact@v4
+        with:
+          name: policy-flaws
+          path: /tmp
+          
       - name: Convert pipeline scan output to SARIF format
         if: always()
         # create code scanning alerts
