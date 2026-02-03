@@ -79,13 +79,17 @@ jobs:
           artifact_name: ${{ matrix.file }}
           debug: 1
 
+      - run: |
+          Get-ChildItem -Force -Recurse
+        shell: powershell
+
       - name: Convert pipeline scan output to SARIF format
         if: always()
         # create code scanning alerts
         uses: veracode/veracode-pipeline-scan-results-to-sarif@master
         with:
           pipeline-results-json: ${{ strategy.job-index }}-filtered_results.json
-          source-base-path-1: "^a/carrotcakecms/carrotcakecms/:./"
+          source-base-path-1: "a/CarrotCakeCMS/CarrotCakeCMS/:./"
           output-results-sarif: veracode-results.sarif
           ref: ${{ github.ref }}
           commitSHA: ${{ github.sha }}
