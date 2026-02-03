@@ -12,7 +12,7 @@ on:
 
 env:
   ARTIFACT_NAME: ${{ inputs.artifact_name || 'veracode-artifact' }}
-  ARTIFACT_PATH: ${{ inputs.artifact_path || 'veracode_artifact_directory/' }}
+  ARTIFACT_PATH: ${{ inputs.artifact_path || 'veracode_artifact_directory' }}
 
 jobs:
   build:
@@ -35,15 +35,16 @@ jobs:
           /p:WDPMergeOption=CreateSeparateAssembly /p:UseFixedNames=true
 
       - run: |
-          (Get-ChildItem -Path ${{ github.workspace }} -Recurse -Include "*.zip" | Where-Object -Property FullName -Like '*\app.publish\*') | % {Copy-Item -Path $_.FullName -Destination "${{ github.workspace }}\${{ env.ARTIFACT_PATH }}" -Force}
+          New-Item -ItemType Directory -Path ${{ env.ARTIFACT_PATH }} -Force
+          (Get-ChildItem -Path ${{ github.workspace }} -Recurse -Include "*.zip" | Where-Object -Property FullName -Like '*\app.publish\*') | % {Copy-Item -Path $_.FullName -Destination ${{ env.ARTIFACT_PATH }} -Force}
         shell: powershell
 
       - run: |
-          Get-ChildItem -Path "${{ github.workspace }}\${{ env.ARTIFACT_PATH }}"
+          Get-ChildItem -Path ${{ env.ARTIFACT_PATH }}
         shell: powershell
 
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: ${{ env.ARTIFACT_PATH }}\
+          path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
