@@ -79,10 +79,11 @@ jobs:
           artifact_name: ${{ matrix.file }}
           debug: 1
 
-      - run: |
-          Get-ChildItem -Force -Recurse
-        shell: powershell
+      - name: List Items
         if: always()
+        shell: powershell
+        run: |
+          Get-ChildItem -Path . -Force -Recurse
 
       - name: Convert pipeline scan output to SARIF format
         if: always()
