@@ -86,10 +86,10 @@ jobs:
       - name: Convert pipeline scan output to SARIF format
         if: always()
         # create code scanning alerts
-        uses: veracode/veracode-pipeline-scan-results-to-sarif@master
+        uses: veracode/veracode-pipeline-scan-results-to-sarif@autoRewritePath
         with:
           pipeline-results-json: ${{ strategy.job-index }}-filtered_results.json
-          source-base-path-1: "a/CarrotCakeCMS/CarrotCakeCMS/:./"
+          # source-base-path-1: "a/carrotcakecms/carrotcakecms/:/"
           output-results-sarif: veracode-results.sarif
           ref: ${{ github.ref }}
           commitSHA: ${{ github.sha }}
