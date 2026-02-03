@@ -1,0 +1,112 @@
+aname: Veracode Pipeline Scan And SARIF Upload
+
+on: workflow_dispatch
+
+# env:
+#   ARTIFACT_NAME: maven-build
+#   ARTIFACT_PATH: app/target/*.war
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+          cache: false
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v1.1.3
+
+      - name: MSBuild - Precompile - Visual Studio Solution
+        shell: cmd
+        run: | 
+          msbuild CarrotwareCMS.sln /t:Rebuild /tv:14.0 ^
+          /p:OutputPath=bin /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem ^
+          /p:PrecompileBeforePublish=true /p:EnableUpdateable=false /p:DebugSymbols=true ^
+          /p:UseMerge=false /p:DeleteAppCodeCompiledFiles=True /p:DeleteExistingFiles=True ^
+          /p:WDPMergeOption=CreateSeparateAssembly /p:UseFixedNames=true
+
+      # - name: MSBuild - Precompile - Visual Studio Project
+      #   shell: cmd
+      #   run: | 
+      #     msbuild carrotcake.csproj /p:OutputPath=bin /p:DeployOnBuild=true ^
+      #     /p:PublishProvider="FileSystem" /p:PrecompileBeforePublish=true /p:EnableUpdateable=false ^
+      #     /p:DebugSymbols=true /p:WDPMergeOption="CreateSeparateAssembly" ^
+      #     /p:UseFixedNames=true /p:RestorePackagesConfig=true
+
+      - run: get-childitem -recurse -force -path .
+        shell: powershell
+
+      # - name: Upload build artifacts
+      #   if: success()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.ARTIFACT_NAME }}
+      #     path: ${{ env.ARTIFACT_PATH }}
+      #     retention-days: 3
+
+  # pipeline_scan:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   name: Veracode Pipeline Scan
+  #   steps:
+  #     - name: checkout repo
+  #       uses: actions/checkout@v6
+
+  #     - name: get archive
+  #       uses: actions/download-artifact@v6
+  #       with:
+  #         name: ${{ env.ARTIFACT_NAME }}
+
+  #     - name: pipeline-scan action step
+  #       id: pipeline-scan
+  #       uses: veracode/Veracode-pipeline-scan-action@esd-true
+  #       with:
+  #         vid: ${{ secrets.VID }}
+  #         vkey: ${{ secrets.VKEY }}
+  #         file: "verademo.war"
+  #         veracode_policy_name: "Veracode Recommended Very High"
+  #         debug: 1
+  #         fail_build: false
+
+  # results_to_sarif:
+  #   if: always()
+  #   needs: pipeline_scan
+  #   runs-on: ubuntu-latest
+  #   name: Import Pipeline Results to SARIF
+  #   steps:
+  #     - name: checkout repo
+  #       uses: actions/checkout@v6
+
+  #     - name: Get scan results
+  #       uses: actions/download-artifact@v6
+  #       with:
+  #         name: "Veracode Pipeline-Scan Results"
+
+  #     - name: Convert pipeline scan output to SARIF format
+  #       id: convert
+  #       uses: Veracode/veracode-pipeline-scan-results-to-sarif@v2.0.4
+  #       with:
+  #         results-json: filtered_results.json
+  #         output-results-sarif: veracode-results.sarif
+  #         source-base-path-1: "^com/:src/main/java/com/"
+  #         source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
+  #         repo_owner: ${{ github.repository_owner }}
+  #         # repo_name: ${{ github.event.repository.name }}
+  #         commitSHA: ${{ github.sha }}
+  #         ref: ${{ github.ref }}
+  #         githubToken: ${{ github.token }}
+
+  #     - name: Upload SARIF
+  #       id: upload
+  #       uses: github/codeql-action/upload-sarif@v4
+  #       with:
+  #         sarif_file: veracode-results.sarif
+  #         category: pipeline-scan
