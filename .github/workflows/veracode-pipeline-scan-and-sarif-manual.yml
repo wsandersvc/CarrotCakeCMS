@@ -90,7 +90,7 @@ jobs:
         uses: veracode/veracode-pipeline-scan-results-to-sarif@v2.0.3
         with:
           pipeline-results-json: ${{ strategy.job-index }}-filtered_results.json
-          source-base-path-1: "a/carrotcakecms/carrotcakecms/:./"
+          source-base-path-1: "a/carrotcakecms/carrotcakecms/:"
           output-results-sarif: veracode-results.sarif
           ref: ${{ github.ref }}
           commitSHA: ${{ github.sha }}
