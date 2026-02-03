@@ -7,11 +7,7 @@ on: workflow_dispatch
 #   ARTIFACT_PATH: app/target/*.war
 
 jobs:
-  build:
-    name: Build
-    uses: ./.github/workflows/veracode-package-build.yml
-    secrets: inherit
-    
+  
   build:
     runs-on: windows-latest
 
@@ -31,8 +27,7 @@ jobs:
           /p:UseMerge=false /p:DeleteAppCodeCompiledFiles=True /p:DeleteExistingFiles=True ^
           /p:WDPMergeOption=CreateSeparateAssembly /p:UseFixedNames=true
 
-      # - name: Upload build artifacts
-      #   if: success()
+      - name: Upload build artifacts
       #   uses: actions/upload-artifact@v4
       #   with:
       #     name: ${{ env.ARTIFACT_NAME }}
