@@ -51,7 +51,7 @@ jobs:
   fetch_policy_flaws_task:
     if: ${{ inputs.flaw_import && always() }}
     needs: policy_scan
-    uses: wsandersvc/actions/.github/workflows/veracode-fetch-and-import-sarif-policy-flaws.yml@main
+    uses: wsandersvco/actions/.github/workflows/veracode-fetch-and-import-sarif-policy-flaws.yml@main
     secrets: inherit
     with:
       application_name: GitHub Actions - CarrotCakeCMS
