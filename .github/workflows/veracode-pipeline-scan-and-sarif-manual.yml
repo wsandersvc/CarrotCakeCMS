@@ -28,10 +28,19 @@ jobs:
         shell: cmd
         run: | 
           msbuild CarrotwareCMS.sln /t:Rebuild ^
-          /p:OutputPath=bin /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem ^
+          /p:OutputPath=bin\app.publish /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem ^
           /p:PrecompileBeforePublish=true /p:EnableUpdateable=false /p:DebugSymbols=true ^
           /p:UseMerge=false /p:DeleteAppCodeCompiledFiles=True /p:DeleteExistingFiles=True ^
           /p:WDPMergeOption=CreateSeparateAssembly /p:UseFixedNames=true
+
+      # - name: MSBuild - Precompile - Visual Studio Solution
+      #   shell: cmd
+      #   run: | 
+      #     msbuild CarrotwareCMS.sln /t:Rebuild ^
+      #     /p:OutputPath=bin /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem ^
+      #     /p:PrecompileBeforePublish=true /p:EnableUpdateable=false /p:DebugSymbols=true ^
+      #     /p:UseMerge=false /p:DeleteAppCodeCompiledFiles=True /p:DeleteExistingFiles=True ^
+      #     /p:WDPMergeOption=CreateSeparateAssembly /p:UseFixedNames=true
 
       # - name: MSBuild - Precompile - Visual Studio Project
       #   shell: cmd
