@@ -12,7 +12,7 @@ on:
 
 env:
   ARTIFACT_NAME: ${{ inputs.artifact_name || 'veracode-artifact' }}
-  ARTIFACT_PATH: ${{ inputs.artifact_path || 'veracode_artifact_directory' }}
+  ARTIFACT_PATH: ${{ inputs.artifact_path || 'veracode_artifact_directory/' }}
 
 jobs:
   build:
@@ -45,5 +45,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: ${{ env.ARTIFACT_PATH }}\**
+          path: ${{ env.ARTIFACT_PATH }}/
           if-no-files-found: error
