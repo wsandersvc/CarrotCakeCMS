@@ -1,5 +1,11 @@
 name: Veracode Static Analysis - Upload And Scan
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      flaw_import:
+        type: boolean
+        required: false
+        default: true
 
 env:
   ARTIFACT_NAME: veracode-artifact
@@ -43,7 +49,7 @@ jobs:
           policy: 'Veracode Recommended Very High + SCA'
 
   fetch_policy_flaws_task:
-    if: always()
+    if: ${{ inputs.flaw_import && always() }}
     needs: policy_scan
     uses: wsandersvc/actions/.github/workflows/veracode-fetch-and-import-sarif-policy-flaws.yml@main
     secrets: inherit
