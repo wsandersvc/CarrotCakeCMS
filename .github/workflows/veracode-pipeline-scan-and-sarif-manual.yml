@@ -27,7 +27,7 @@ jobs:
       - name: MSBuild - Precompile - Visual Studio Solution
         shell: cmd
         run: | 
-          msbuild carrotcake.sln /t:Rebuild /tv:14.0 ^
+          msbuild CarrotwareCMS.sln /t:Rebuild /tv:14.0 ^
           /p:OutputPath=bin /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem ^
           /p:PrecompileBeforePublish=true /p:EnableUpdateable=false /p:DebugSymbols=true ^
           /p:UseMerge=false /p:DeleteAppCodeCompiledFiles=True /p:DeleteExistingFiles=True ^
